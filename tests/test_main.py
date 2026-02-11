@@ -19,3 +19,8 @@ def test_main_page_switches_language(page, site_base_url):
     page.wait_for_load_state("networkidle")
     switch_language(page, "ru")
     assert_url_equals(page, site_base_url["ru"])
+
+def test_main_page_has_attribution(page, site_base_url):
+    page.goto(site_base_url["en"])
+    page.wait_for_load_state("networkidle")
+    assert page.locator(".maplibregl-ctrl-attrib-inner").is_visible()
