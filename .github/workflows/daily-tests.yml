@@ -30,7 +30,7 @@ jobs:
         run: playwright install --with-deps chromium
 
       - name: Run tests
-        run: pytest tests/ -v
+        run: pytest tests/ -v --html=report.html --self-contained-html
 
       - name: Publish report to docs/
         if: always()
