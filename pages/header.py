@@ -1,6 +1,6 @@
 def switch_language(page, language):
     language_text = {"en": "English", "ru": "Русский", "ka": "ქართული"}
-    page.locator("#language-toggle").click()
-    page.locator("#language-dropdown div div").filter(
-        has=page.locator("span", has_text=language_text[language])
-    ).click()
+    switcher = page.locator(".hextra-language-switcher").first
+    options = page.locator(".hextra-language-options").first
+    switcher.click()
+    options.locator("li").filter(has=page.locator("a", has_text=language_text[language])).click()
