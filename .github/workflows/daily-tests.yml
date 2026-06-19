@@ -8,11 +8,18 @@ on:
   schedule:
     - cron: '0 6 * * *'
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
   test:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - uses: actions/checkout@v4
 
@@ -32,13 +39,26 @@ jobs:
       - name: Run tests
         run: pytest tests/ -v --browser chromium --browser firefox --html=report.html --self-contained-html
 
-      - name: Publish report to docs/
+      - name: Prepare Pages artifact
         if: always()
         run: |
-            mkdir -p docs
-            cp report.html docs/index.html
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add docs/
-            git diff --staged --quiet || git commit -m "Update test report [skip ci]"
-            git push
+          mkdir -p _site
+          cp report.html _site/index.html
+
+      - name: Upload Pages artifact
+        if: always()
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    if: always()
+    needs: test
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
