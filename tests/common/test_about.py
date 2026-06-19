@@ -1,6 +1,5 @@
 import pytest
 from config import LANGUAGES
-from pages.header import switch_language
 
 page_titles = {"en": "About", "ru": "О проекте", "ka": "პროექტის შესახებ"}
 

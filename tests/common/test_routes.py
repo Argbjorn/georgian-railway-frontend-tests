@@ -1,6 +1,5 @@
 import pytest
 from config import LANGUAGES
-from pages.header import switch_language
 from tests.helpers import assert_url_equals, open_routes_page
 
 page_titles = {"en": "Train Routes", "ru": "Маршруты поездов", "ka": "მატარებლის მარშრუტები"}

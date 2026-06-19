@@ -27,10 +27,10 @@ jobs:
           pip install -r requirements.txt
 
       - name: Install Playwright browsers
-        run: playwright install --with-deps chromium
+        run: playwright install --with-deps chromium firefox
 
       - name: Run tests
-        run: pytest tests/ -v --html=report.html --self-contained-html
+        run: pytest tests/ -v --browser chromium --browser firefox --html=report.html --self-contained-html
 
       - name: Publish report to docs/
         if: always()
