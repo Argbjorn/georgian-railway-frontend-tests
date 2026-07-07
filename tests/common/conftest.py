@@ -3,6 +3,20 @@ from config import DESKTOP_VIEWPORT, MOBILE_DEVICE
 
 DEVICES = ["mobile", "desktop"]
 
+@pytest.fixture(scope="session")
+def browser_type_launch_args(browser_type_launch_args, browser_name):
+    # headless Firefox disables WebGL on machines without a GPU,
+    # which stops the maplibre map from ever rendering
+    if browser_name == "firefox":
+        return {
+            **browser_type_launch_args,
+            "firefox_user_prefs": {
+                "webgl.force-enabled": True,
+                "webgl.disable-fail-if-major-performance-caveat": True,
+            },
+        }
+    return browser_type_launch_args
+
 @pytest.fixture(scope="session", params=DEVICES, ids=DEVICES)
 def device_type(request):
     return request.param
