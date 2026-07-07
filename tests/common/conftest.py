@@ -13,10 +13,6 @@ def browser_type_launch_args(browser_type_launch_args, browser_name):
         return {
             **browser_type_launch_args,
             "headless": False,
-            "firefox_user_prefs": {
-                "webgl.force-enabled": True,
-                "webgl.disable-fail-if-major-performance-caveat": True,
-            },
         }
     return browser_type_launch_args
 

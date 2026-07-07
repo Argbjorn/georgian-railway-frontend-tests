@@ -42,15 +42,7 @@ jobs:
       - name: Run tests
         # firefox is launched headed (see tests/common/conftest.py) because its headless
         # mode refuses to create a WebGL context, so it needs a real (virtual) display
-        run: xvfb-run -a pytest tests/ -v --browser chromium --browser firefox --html=report.html --self-contained-html --tracing=retain-on-failure --screenshot=only-on-failure
-
-      - name: Upload traces
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-traces
-          path: test-results/
-          retention-days: 7
+        run: xvfb-run -a pytest tests/ -v --browser chromium --browser firefox --html=report.html --self-contained-html
 
       - name: Prepare Pages artifact
         if: always()
