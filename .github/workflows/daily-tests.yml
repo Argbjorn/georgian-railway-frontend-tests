@@ -37,7 +37,15 @@ jobs:
         run: playwright install --with-deps chromium firefox
 
       - name: Run tests
-        run: pytest tests/ -v --browser chromium --browser firefox --html=report.html --self-contained-html
+        run: pytest tests/ -v --browser chromium --browser firefox --html=report.html --self-contained-html --tracing=retain-on-failure --screenshot=only-on-failure
+
+      - name: Upload traces
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-traces
+          path: test-results/
+          retention-days: 7
 
       - name: Prepare Pages artifact
         if: always()
