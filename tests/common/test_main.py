@@ -2,6 +2,7 @@ import pytest
 from config import LANGUAGES
 from pages.header import switch_language
 from tests.helpers import assert_url_equals
+from playwright.sync_api import expect
 
 def test_main_page_opens_and_has_correct_title(page, site_base_url):
     page.goto(site_base_url["en"])
@@ -23,4 +24,4 @@ def test_main_page_switches_language(page, site_base_url):
 def test_main_page_has_attribution(page, site_base_url):
     page.goto(site_base_url["en"])
     page.wait_for_load_state("networkidle")
-    assert page.locator(".maplibregl-ctrl-attrib-inner").is_visible()
+    expect(page.locator(".maplibregl-ctrl-attrib-inner")).to_be_visible(timeout=10000)
