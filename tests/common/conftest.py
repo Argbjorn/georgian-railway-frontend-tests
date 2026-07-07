@@ -5,11 +5,14 @@ DEVICES = ["mobile", "desktop"]
 
 @pytest.fixture(scope="session")
 def browser_type_launch_args(browser_type_launch_args, browser_name):
-    # headless Firefox disables WebGL on machines without a GPU,
-    # which stops the maplibre map from ever rendering
+    # Firefox's headless mode refuses to create a WebGL context at all
+    # (FEATURE_FAILURE_WEBGL_EXHAUSTED_DRIVERS), which stops the maplibre
+    # map from ever rendering. Running headed under Xvfb (see CI workflow)
+    # gives it a real GLX surface to fall back to software rendering.
     if browser_name == "firefox":
         return {
             **browser_type_launch_args,
+            "headless": False,
             "firefox_user_prefs": {
                 "webgl.force-enabled": True,
                 "webgl.disable-fail-if-major-performance-caveat": True,
